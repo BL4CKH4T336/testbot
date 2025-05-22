@@ -1,11 +1,11 @@
 from flask import Flask, request
 import telebot
+import os
 
 TOKEN = "7751696764:AAGmO-BuVoXkydbdKQY9BZYHxLyVtGm4JD4"
 bot = telebot.TeleBot(TOKEN)
 app = Flask(__name__)
 
-# Replace this with your Render app's URL (must be HTTPS)
 WEBHOOK_URL = "https://testbotbydarkboy.onrender.com/"
 
 @bot.message_handler(commands=['start'])
@@ -24,10 +24,9 @@ def webhook():
 def index():
     return 'Bot is running.', 200
 
-@app.before_first_request
-def setup_webhook():
+if __name__ == '__main__':
     bot.remove_webhook()
     bot.set_webhook(url=WEBHOOK_URL)
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=10000)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
