@@ -14,7 +14,7 @@ from sqlalchemy.orm import sessionmaker, relationship, declarative_base
 from werkzeug.security import generate_password_hash, check_password_hash
 
 # ----- Config -----
-TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN', '8039732483:AAGA-TeqXg29ZpDezr2WqIO4EW3YrkaHVOg')
+TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN', '8039732483:AAFx68pqXn6nAf8xe2W010q-nQWjXqCh-CQ')
 DATABASE_URL = 'sqlite:///uptime.db'
 MAX_PASSWORD_ATTEMPTS = 3
 INDIAN_TIMEZONE = pytz.timezone('Asia/Kolkata')
