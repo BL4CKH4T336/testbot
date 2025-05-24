@@ -12,6 +12,13 @@ from telebot.util import quick_markup
 from sqlalchemy import create_engine, Column, Integer, String, DateTime, ForeignKey, Boolean, Float
 from sqlalchemy.orm import sessionmaker, relationship, declarative_base
 from werkzeug.security import generate_password_hash, check_password_hash
+import threading
+from flask import Flask
+import telebot
+from your_database_module import init_db, db_session  # Replace with your actual module
+
+app = Flask(__name__)
+
 
 # ----- Config -----
 TELEGRAM_BOT_TOKEN = os.getenv('TELEGRAM_BOT_TOKEN', '8039732483:AAFx68pqXn6nAf8xe2W010q-nQWjXqCh-CQ')
@@ -870,12 +877,28 @@ def back_to_settings(call: types.CallbackQuery) -> None:
     )
 
 # ----- Start polling -----
-if __name__ == '__main__':
-    print("Initializing database...")
-    init_db()
-    print("Bot started...")
+@app.route('/')
+def home():
+    return 'Flask is running alongside polling bot!'
+
+# --- Polling Function ---
+def run_polling():
+    print("Starting bot polling...")
     try:
         bot.infinity_polling()
     except Exception as e:
-        print(f"Error: {e}")
+        print(f"Polling Error: {e}")
         db_session.close()
+
+# --- Main ---
+if __name__ == '__main__':
+    print("Initializing database...")
+    init_db()
+
+    # Start polling in a new thread
+    polling_thread = threading.Thread(target=run_polling)
+    polling_thread.start()
+
+    # Start Flask app
+    print("Starting Flask app...")
+    app.run(host='0.0.0.0', port=5000)
